@@ -93,3 +93,5 @@ ENV/
 # Temporary data
 .ipynb_checkpoints/
 
+.idea/
+Would skip repository deep-learning-models/

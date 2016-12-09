@@ -1,8 +1,10 @@
 import os
 
+
 def list_images(basePath, contains=None):
     # return the set of files that are valid
     return list_files(basePath, validExts=(".jpg", ".jpeg", ".png", ".bmp"), contains=contains)
+
 
 def list_files(basePath, validExts=(".jpg", ".jpeg", ".png", ".bmp"), contains=None):
     # loop over the directory structure

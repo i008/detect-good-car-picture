@@ -50,3 +50,5 @@ class SimpleImageLabaler:
 
     def save(self):
         pass
+
+

@@ -1,3 +1,0 @@
-[submodule "deeplearningmodels"]
-	path = deeplearningmodels
-	url = git@github.com:fchollet/deep-learning-models.git

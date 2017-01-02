@@ -94,3 +94,4 @@ ENV/
 .ipynb_checkpoints/
 
 .idea/
+exp*

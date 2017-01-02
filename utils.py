@@ -1,14 +1,13 @@
 import os
 
 
-def list_images(basePath, contains=None):
-    # return the set of files that are valid
-    return list_files(basePath, validExts=(".jpg", ".jpeg", ".png", ".bmp"), contains=contains)
+def list_images(base_path, contains=None):
+    return list_files(base_path, valid_exts=(".jpg", ".jpeg", ".png", ".bmp"), contains=contains)
 
 
-def list_files(basePath, validExts=(".jpg", ".jpeg", ".png", ".bmp"), contains=None):
+def list_files(base_path, valid_exts=(".jpg", ".jpeg", ".png", ".bmp"), contains=None):
     # loop over the directory structure
-    for (rootDir, dirNames, filenames) in os.walk(basePath):
+    for (rootDir, dirNames, filenames) in os.walk(base_path):
         # loop over the filenames in the current directory
         for filename in filenames:
             # if the contains string is not none and the filename does not contain
@@ -20,7 +19,7 @@ def list_files(basePath, validExts=(".jpg", ".jpeg", ".png", ".bmp"), contains=N
             ext = filename[filename.rfind("."):].lower()
 
             # check to see if the file is an image and should be processed
-            if ext.endswith(validExts):
+            if ext.endswith(valid_exts):
                 # construct the path to the image and yield it
                 imagePath = os.path.join(rootDir, filename).replace(" ", "\\ ")
                 yield imagePath

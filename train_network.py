@@ -1,0 +1,56 @@
+from models import create_model
+from settings import IMAGE_COLS, IMAGE_ROWS, TARGET_SIZE, TEST_PATH, TRAIN_PATH
+from keras.callbacks import ModelCheckpoint, History
+from keras.preprocessing import image
+from utils import list_images
+
+model_dump_name="cars-{epoch:02d}-{val_acc:.2f}.hdf5"
+
+checkpoint_callback = ModelCheckpoint(model_dump_name, save_best_only=True, monitor='val_acc')
+history_callback = History()
+callbacks = [checkpoint_callback, history_callback]
+
+
+model = create_model(img_cols=IMAGE_COLS, img_rows=IMAGE_ROWS)
+model.compile(
+    loss='categorical_crossentropy',
+    optimizer='adam',
+    metrics=['accuracy']
+)
+
+
+imd_train = image.ImageDataGenerator(
+        rescale=1./255,
+        shear_range=0.2,
+        zoom_range=0.2,
+        horizontal_flip=True,
+        vertical_flip=True
+
+)
+imd_test = image.ImageDataGenerator(rescale=1./255)
+
+imd_train_flow = imd_train.flow_from_directory(TRAIN_PATH,
+                                               color_mode='rgb',
+                                               target_size=TARGET_SIZE,
+                                               batch_size=32,
+                                               class_mode='categorical'
+                                              )
+
+imd_test_flow = imd_test.flow_from_directory(TEST_PATH,
+                                             color_mode='rgb',
+                                             batch_size=32,
+                                             class_mode='categorical',
+                                             target_size=TARGET_SIZE)
+
+number_of_train_images = len(list(list_images(TRAIN_PATH)))
+
+training_history = model.fit_generator(
+    imd_train_flow,
+    validation_data=imd_test_flow,
+    samples_per_epoch=number_of_train_images,
+    nb_epoch=30,
+    verbose=True,
+    nb_val_samples=200,
+    class_weight={0: 1 , 1: 0.1808, 2: 0.38, 3: 0.03, 4: 0.2}
+)
+

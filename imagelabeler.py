@@ -1,11 +1,11 @@
 import json
 from collections import OrderedDict
 
-from utils import list_images
-
-from IPython.display import display
 import matplotlib.pyplot as plt
+from IPython.display import display
 from ipywidgets import interact, widgets
+
+from utils import list_images
 
 
 class SimpleImageLabaler:
@@ -76,4 +76,3 @@ class SimpleImageLabaler:
 
     def save(self):
         pass
-

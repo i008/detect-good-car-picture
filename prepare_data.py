@@ -53,8 +53,8 @@ def prepare_folder_structure(minority_balanced=False):
             copy_to = os.path.join(FULL_EXP_PATH, 'test', label, file_name)
             shutil.copyfile(path, copy_to)
 
+    return df_labels
+
 if __name__ == '__main__':
     prepare_folder_structure()
 
-
-import i008

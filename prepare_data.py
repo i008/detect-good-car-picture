@@ -1,13 +1,16 @@
 import json
 import os
-import pandas as pd
 import shutil
+
+import pandas as pd
 from i008.pandas_shortcuts import minority_balance_dataframe_by_multiple_categorical_variables
+from sklearn.externals import joblib
 from sklearn.model_selection import train_test_split
 from sklearn.preprocessing import LabelEncoder
-from sklearn.externals import joblib
 
+from logger import logger
 from settings import LABELS_FILE, FULL_EXP_PATH, TRAIN_PATH, TEST_PATH, BALANCE, TRAINED_MODELS_PATH
+
 EXCLUDE_LABELS = ['top', 'other', 'noclass']
 
 
@@ -21,9 +24,9 @@ def prepare_folder_structure(minority_balanced=None):
 
     df_labels.set_value(df_labels.index, 'is_train', True)
 
-
     if minority_balanced:
-        df_labels = minority_balance_dataframe_by_multiple_categorical_variables(df_labels, categorical_columns=['label'])
+        df_labels = minority_balance_dataframe_by_multiple_categorical_variables(df_labels,
+                                                                                 categorical_columns=['label'])
 
     train, test = train_test_split(df_labels, test_size=0.2, stratify=df_labels.label)
     df_labels.set_value(train.index, 'is_train', True)
@@ -55,8 +58,7 @@ def prepare_folder_structure(minority_balanced=None):
             copy_to = os.path.join(FULL_EXP_PATH, 'test', label, file_name)
             shutil.copyfile(path, copy_to)
 
-    print(df_labels.head())
-    print(df_labels.label.value_counts())
+    logger.info(df_labels.label.value_counts())
 
     return df_labels
 
@@ -64,12 +66,3 @@ def prepare_folder_structure(minority_balanced=None):
 df_labels = prepare_folder_structure(minority_balanced=BALANCE)
 label_encoder = LabelEncoder().fit(df_labels.label)
 joblib.dump(label_encoder, os.path.join(TRAINED_MODELS_PATH, 'label_encoder.scikitlearn'))
-
-
-
-
-
-
-
-
-

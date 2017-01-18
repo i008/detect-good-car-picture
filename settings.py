@@ -13,3 +13,4 @@ TRAIN_PATH = os.path.join(FULL_EXP_PATH, 'train')
 TEST_PATH = os.path.join(FULL_EXP_PATH, 'test')
 TRAINED_MODELS_PATH = os.path.join(PROJECT_PATH, 'trained_models')
 BALANCE = False
+DEBUG = True

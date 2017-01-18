@@ -33,10 +33,6 @@ def prepare_folder_structure(minority_balanced=None):
     df_labels.set_value(test.index, 'is_train', False)
     df_labels = df_labels.reindex_axis(sorted(df_labels.columns), axis=1)
 
-    # FULL_EXP_PATH = os.path.join(BASE_PATH, EXP_NAME)
-    # TRAIN_PATH = os.path.join(FULL_EXP_PATH, 'train')
-    # TEST_PATH = os.path.join(FULL_EXP_PATH, 'test')
-
     if os.path.exists(FULL_EXP_PATH):
         shutil.rmtree(FULL_EXP_PATH)
 

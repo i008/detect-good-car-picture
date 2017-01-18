@@ -1,6 +1,8 @@
 import logging
 import sys
 
+from settings import DEBUG
+
 
 def get_logger(lvl=logging.DEBUG, log_file_name=None, logger_name='default', elk_host=None, elk_port=None):
     logger = logging.getLogger(logger_name)
@@ -24,7 +26,9 @@ def get_logger(lvl=logging.DEBUG, log_file_name=None, logger_name='default', elk
     stdout_handler.setFormatter(stdout_formatter)
     logger.addHandler(stdout_handler)
 
-    return logger
+    if not DEBUG:
+        logger.disabled = True
 
+    return logger
 
 logger = get_logger()

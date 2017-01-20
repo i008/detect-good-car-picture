@@ -1,7 +1,7 @@
 import numpy as np
 from keras.applications.resnet50 import ResNet50
 from keras.applications.vgg19 import VGG19
-
+from prepare_data import df_labels
 from utils import load_image_keras_imagenet_compatible
 
 
@@ -26,8 +26,21 @@ class ImageNetExtractor:
             raise ValueError(
                 'Imagenet requires images with shape (n, 3, 224, 224) / (n, 224, 224, 3) \n {}'.format(shape))
 
-        return self.model.predict(array_of_images).flatten()
+        return self.model.predict(array_of_images)#.flatten()
 
     def describe_from_path(self, list_of_image_pahts):
         array_of_images = np.concatenate([load_image_keras_imagenet_compatible(p) for p in list_of_image_pahts], axis=0)
-        return self.describe(array_of_images)
+        print('shape:')
+        print(array_of_images.shape)
+        return self.describe(array_of_images).reshape(array_of_images.shape[0], -1)
+
+#
+if __name__ == '__main__':
+    files = df_labels.file_name[:3]
+    imne = ImageNetExtractor()
+    described = imne.describe_from_path(files)
+    print(described.shape)
+    # print(described[0])
+    # print(described[0].shape)
+
+

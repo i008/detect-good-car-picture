@@ -69,7 +69,7 @@ def load_image_keras_imagenet_compatible(image_path, normalize_image=True, gray=
     imarray = image.img_to_array(im)
 
     if normalize_image:
-        im = im * 1 / 255
+        imarray = imarray * 1 / 255
 
     imarray = np.expand_dims(imarray, axis=0)
     imarray = preprocess_input(imarray)

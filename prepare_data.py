@@ -9,7 +9,9 @@ from sklearn.model_selection import train_test_split
 from sklearn.preprocessing import LabelEncoder
 
 from logger import logger
-from settings import LABELS_FILE, FULL_EXP_PATH, TRAIN_PATH, TEST_PATH, BALANCE, TRAINED_MODELS_PATH
+from settings import (
+    LABELS_FILE, FULL_EXP_PATH, TRAIN_PATH, TEST_PATH, BALANCE, TRAINED_MODELS_PATH, IMAGES_PATH
+)
 
 EXCLUDE_LABELS = ['top', 'other', 'noclass']
 
@@ -17,6 +19,8 @@ EXCLUDE_LABELS = ['top', 'other', 'noclass']
 def prepare_folder_structure(minority_balanced=None):
     with open(LABELS_FILE, 'r') as labels:
         labels = json.loads(labels.read())
+        labels = {os.path.join(IMAGES_PATH, k.split('/')[-1]): v for k, v in labels.items()}
+        print(labels)
 
     df_labels = pd.DataFrame(data={'label': list(labels.values()), 'file_name': list(labels.keys())})
     df_labels = df_labels[~df_labels.label.isin(EXCLUDE_LABELS)]

@@ -12,5 +12,7 @@ FULL_EXP_PATH = os.path.join(BASE_PATH, EXP_NAME)
 TRAIN_PATH = os.path.join(FULL_EXP_PATH, 'train')
 TEST_PATH = os.path.join(FULL_EXP_PATH, 'test')
 TRAINED_MODELS_PATH = os.path.join(PROJECT_PATH, 'trained_models')
+IMAGES_PATH = '/home/i008/cars_train'
 BALANCE = False
 DEBUG = True
+

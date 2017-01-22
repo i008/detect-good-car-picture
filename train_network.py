@@ -3,10 +3,10 @@ from keras.preprocessing import image
 import os
 from models import create_model
 from prepare_data import prepare_folder_structure
-from settings import IMAGE_COLS, IMAGE_ROWS, TARGET_SIZE, TEST_PATH, TRAIN_PATH, TRAINED_MODELS_PATH
+from settings import IMAGE_COLS, IMAGE_ROWS, TARGET_SIZE, TEST_PATH, TRAIN_PATH, TRAINED_MODELS_PATH, BALANCE
 
 df_labels = prepare_folder_structure(
-    minority_balanced=True
+    minority_balanced=BALANCE
 )
 
 n_classes = df_labels.label.unique().shape[0]
@@ -56,6 +56,6 @@ training_history = model.fit_generator(
     nb_epoch=30,
     verbose=True,
     nb_val_samples=200,
-    # class_weight={0: 1, 1: 0.1808, 2: 0.38, 3: 0.03, 4: 0.2},
+    class_weight={0: 1, 1: 0.1808, 2: 0.38, 3: 0.03, 4: 0.2},
     callbacks=callbacks
 )

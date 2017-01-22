@@ -96,4 +96,4 @@ ENV/
 .idea/
 exp*
 *.hdf5
-/trained_models/
+/trained_models/*

@@ -17,6 +17,7 @@ EXCLUDE_LABELS = ['top', 'other', 'noclass']
 
 
 def prepare_folder_structure(minority_balanced=None):
+    print(TRAINED_MODELS_PATH)
     with open(LABELS_FILE, 'r') as labels:
         labels = json.loads(labels.read())
         labels = {os.path.join(IMAGES_PATH, k.split('/')[-1]): v for k, v in labels.items()}

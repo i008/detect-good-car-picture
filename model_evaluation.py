@@ -7,7 +7,7 @@ from prepare_data import df_labels
 from settings import *
 from utils import load_images_keras
 
-model_name = os.path.join(TRAINED_MODELS_PATH, 'cars-24-0.82.hdf5')
+model_name = os.path.join(TRAINED_MODELS_PATH, 'cars-17-0.87.hdf5')
 model_nn = keras.models.load_model(model_name)
 label_encoder = joblib.load(os.path.join(PROJECT_PATH, 'trained_models/label_encoder.scikitlearn'))
 

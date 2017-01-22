@@ -1,6 +1,8 @@
+import os
+
 from keras.callbacks import ModelCheckpoint, History
 from keras.preprocessing import image
-import os
+
 from models import create_model
 from prepare_data import prepare_folder_structure
 from settings import IMAGE_COLS, IMAGE_ROWS, TARGET_SIZE, TEST_PATH, TRAIN_PATH, TRAINED_MODELS_PATH, BALANCE
@@ -34,18 +36,22 @@ imd_train = image.ImageDataGenerator(
 )
 imd_test = image.ImageDataGenerator(rescale=1. / 255)
 
-imd_train_flow = imd_train.flow_from_directory(TRAIN_PATH,
-                                               color_mode='rgb',
-                                               target_size=TARGET_SIZE,
-                                               batch_size=64,
-                                               class_mode='categorical'
-                                               )
 
-imd_test_flow = imd_test.flow_from_directory(TEST_PATH,
-                                             color_mode='rgb',
-                                             batch_size=64,
-                                             class_mode='categorical',
-                                             target_size=TARGET_SIZE)
+imd_train_flow = imd_train.flow_from_directory(
+    TRAIN_PATH,
+    color_mode='rgb',
+    target_size=TARGET_SIZE,
+    batch_size=64,
+    class_mode='categorical'
+)
+
+imd_test_flow = imd_test.flow_from_directory(
+    TEST_PATH,
+    color_mode='rgb',
+    batch_size=64,
+    class_mode='categorical',
+    target_size=TARGET_SIZE
+)
 
 number_of_train_images = df_labels[df_labels.is_train].shape[0]
 

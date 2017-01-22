@@ -59,11 +59,13 @@ def prepare_folder_structure(minority_balanced=None):
             copy_to = os.path.join(FULL_EXP_PATH, 'test', label, file_name)
             shutil.copyfile(path, copy_to)
 
+    le = LabelEncoder()
+    le.fit(df_labels.label)
+    joblib.dump(le, os.path.join(TRAINED_MODELS_PATH, 'label_encoder.scikitlearn'))
+
     logger.info(df_labels.label.value_counts())
 
     return df_labels
 
 
 df_labels = prepare_folder_structure(minority_balanced=BALANCE)
-label_encoder = LabelEncoder().fit(df_labels.label)
-joblib.dump(label_encoder, os.path.join(TRAINED_MODELS_PATH, 'label_encoder.scikitlearn'))

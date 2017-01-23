@@ -1,5 +1,4 @@
 import begin
-
 from current_models import label_encoder, model_nn
 from settings import IMAGE_ROWS, IMAGE_COLS
 from utils import load_image_keras

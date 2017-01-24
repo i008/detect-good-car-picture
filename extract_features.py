@@ -49,3 +49,4 @@ if __name__ == '__main__':
     # print(described[0].shape)
 
 
+from sklearn.externals import joblib

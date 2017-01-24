@@ -12,14 +12,12 @@ df_labels = prepare_folder_structure(
 )
 
 n_classes = df_labels.label.unique().shape[0]
-
 model_dump_name = os.path.join(TRAINED_MODELS_PATH, "cars-{epoch:02d}-{val_acc:.2f}.hdf5")
-
 checkpoint_callback = ModelCheckpoint(model_dump_name, save_best_only=True, monitor='val_acc')
 history_callback = History()
 callbacks = [checkpoint_callback, history_callback]
-
 model = create_model(img_cols=IMAGE_COLS, img_rows=IMAGE_ROWS, n_classes=n_classes)
+
 model.compile(
     loss='categorical_crossentropy',
     optimizer='adam',

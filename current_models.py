@@ -4,7 +4,8 @@ from sklearn.externals import joblib
 import keras
 
 from settings import TRAINED_MODELS_PATH, PROJECT_PATH
+import pandas as pd
 
-model_name = os.path.join(TRAINED_MODELS_PATH, 'cars-28-0.88.hdf5')
-model_nn = keras.models.load_model(model_name)
+model_nn = keras.models.load_model(os.path.join(TRAINED_MODELS_PATH, 'cars-28-0.88.hdf5'))
 label_encoder = joblib.load(os.path.join(PROJECT_PATH, 'trained_models/label_encoder.scikitlearn'))
+df_labels = pd.read_csv(os.path.join(TRAINED_MODELS_PATH, 'labels_df.csv'))

@@ -17,11 +17,11 @@ EXCLUDE_LABELS = ['top', 'other', 'noclass']
 
 
 def prepare_folder_structure(minority_balanced=None):
-    print(TRAINED_MODELS_PATH)
+    logger.info('Preparing folder structure')
     with open(LABELS_FILE, 'r') as labels:
         labels = json.loads(labels.read())
         labels = {os.path.join(IMAGES_PATH, k.split('/')[-1]): v for k, v in labels.items()}
-        print(labels)
+        logger.debug(labels)
 
     df_labels = pd.DataFrame(data={'label': list(labels.values()), 'file_name': list(labels.keys())})
     df_labels = df_labels[~df_labels.label.isin(EXCLUDE_LABELS)]
@@ -63,7 +63,10 @@ def prepare_folder_structure(minority_balanced=None):
     le.fit(df_labels.label)
     joblib.dump(le, os.path.join(TRAINED_MODELS_PATH, 'label_encoder.scikitlearn'))
 
+
     logger.info(df_labels.label.value_counts())
+
+    df_labels.to_csv(os.path.join(TRAINED_MODELS_PATH,'labels_df.csv'))
 
     return df_labels
 

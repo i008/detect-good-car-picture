@@ -1,7 +1,11 @@
 import numpy as np
+import os
 from keras.applications.resnet50 import ResNet50
 from keras.applications.vgg19 import VGG19
-from prepare_data import df_labels
+from sklearn.externals import joblib
+
+from current_models import df_labels
+from settings import TRAINED_MODELS_PATH
 from utils import load_image_keras_imagenet_compatible
 
 
@@ -36,10 +40,11 @@ class ImageNetExtractor:
 
 #
 if __name__ == '__main__':
-    files = df_labels.file_name[:3]
-    imne = ImageNetExtractor()
+    files = df_labels[df_labels.is_train].file_name.tolist()
+    imne = ImageNetExtractor(architecture='vgg19')
     described = imne.describe_from_path(files)
     print(described.shape)
+    joblib.dump(described, os.path.join(TRAINED_MODELS_PATH, 'vgg_features.numpy'))
     # print(described[0])
     # print(described[0].shape)
 

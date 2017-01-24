@@ -1,13 +1,10 @@
-import keras
 import matplotlib.pyplot as plt
 from pandas_ml.confusion_matrix import ConfusionMatrix
-from sklearn.externals import joblib
 
 from current_models import model_nn, label_encoder
 from prepare_data import df_labels
 from settings import *
 from utils import load_images_keras
-
 
 df_test = df_labels[~df_labels.is_train]
 
@@ -17,12 +14,9 @@ pred_proba = model_nn.predict_proba(test_images)
 y_pred = label_encoder.inverse_transform(predictions)
 y_true = df_test.label.tolist()
 
-# cm = ConfusionMatrix(y_true, y_pred)
-# print(cm.classification_report)
-# print(cm.F1_score)
-# print(pred_proba)
-# cm.plot(normalized=True, backend='seaborn')
-# plt.show()
-#
-#
-
+cm = ConfusionMatrix(y_true, y_pred)
+print(cm.classification_report)
+print(cm.F1_score)
+print(pred_proba)
+cm.plot(normalized=True, backend='seaborn')
+plt.show()

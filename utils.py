@@ -1,4 +1,5 @@
 import os
+
 import numpy as np
 from PIL import Image
 
@@ -52,7 +53,7 @@ def load_image_keras(image_path, dim_ordering='default', gray=False, normalize=T
     img = load_img(image_path, grayscale=gray, target_size=target_size)
     img = image.img_to_array(img, dim_ordering=dim_ordering)
     if normalize:
-        img = img * 1/255
+        img = img * 1 / 255
     return np.expand_dims(img, axis=0)
 
 
@@ -77,4 +78,3 @@ def load_image_keras_imagenet_compatible(image_path, normalize_image=True, gray=
     imarray = np.expand_dims(imarray, axis=0)
     imarray = preprocess_input(imarray)
     return imarray
-

@@ -3,6 +3,8 @@ import os
 from keras.callbacks import ModelCheckpoint, History
 from keras.preprocessing import image
 
+from current_models import label_encoder
+from logger import logger
 from models import create_model
 from prepare_data import prepare_folder_structure
 from settings import IMAGE_COLS, IMAGE_ROWS, TARGET_SIZE, TEST_PATH, TRAIN_PATH, TRAINED_MODELS_PATH, BALANCE
@@ -53,6 +55,14 @@ imd_test_flow = imd_test.flow_from_directory(
 
 number_of_train_images = df_labels[df_labels.is_train].shape[0]
 
+
+class_counts = df_labels.label.value_counts()
+class_counts = min(class_counts) / class_counts
+class_counts.index = class_counts.index.map(lambda x: label_encoder.transform([x]))
+optimizer_class_weights = class_counts.to_dict()
+logger.info("weighted classes \n {}".format(optimizer_class_weights))
+
+
 training_history = model.fit_generator(
     imd_train_flow,
     validation_data=imd_test_flow,
@@ -60,6 +70,7 @@ training_history = model.fit_generator(
     nb_epoch=30,
     verbose=True,
     nb_val_samples=200,
-    class_weight={0: 1, 1: 0.1808, 2: 0.38, 3: 0.03, 4: 0.2},
+    # class_weight={0: 1, 1: 0.1808, 2: 0.38, 3: 0.03, 4: 0.2},
+    class_weight=optimizer_class_weights,
     callbacks=callbacks
 )

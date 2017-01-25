@@ -10,7 +10,7 @@ from sklearn.preprocessing import LabelEncoder
 
 from logger import logger
 from settings import (
-    LABELS_FILE, FULL_EXP_PATH, TRAIN_PATH, TEST_PATH, BALANCE, TRAINED_MODELS_PATH, IMAGES_PATH
+    LABELS_FILE, FULL_EXP_PATH, TRAIN_PATH, TEST_PATH, TRAINED_MODELS_PATH, IMAGES_PATH
 )
 
 EXCLUDE_LABELS = ['top', 'other', 'noclass']
@@ -63,12 +63,8 @@ def prepare_folder_structure(minority_balanced=None):
     le.fit(df_labels.label)
     joblib.dump(le, os.path.join(TRAINED_MODELS_PATH, 'label_encoder.scikitlearn'))
 
-
     logger.info(df_labels.label.value_counts())
 
-    df_labels.to_csv(os.path.join(TRAINED_MODELS_PATH,'labels_df.csv'))
+    df_labels.to_csv(os.path.join(TRAINED_MODELS_PATH, 'labels_df.csv'))
 
     return df_labels
-
-
-df_labels = prepare_folder_structure(minority_balanced=BALANCE)

@@ -1,8 +1,7 @@
 import matplotlib.pyplot as plt
 from pandas_ml.confusion_matrix import ConfusionMatrix
 
-from current_models import model_nn, label_encoder
-from prepare_data import df_labels
+from current_models import model_nn, label_encoder, df_labels
 from settings import *
 from utils import load_images_keras
 

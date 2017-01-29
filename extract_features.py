@@ -40,7 +40,17 @@ class ImageNetExtractor:
 
 #
 if __name__ == '__main__':
+    from i008.pandas_shortcuts import minority_balance_dataframe_by_multiple_categorical_variables
+
+    # df_labels = minority_balance_dataframe_by_multiple_categorical_variables(df_labels, categorical_columns=['label'])
+
     files = df_labels[df_labels.is_train].file_name.tolist()
-    imne = ImageNetExtractor(architecture='vgg19')
+    files_test = df_labels[~df_labels.is_train].file_name.tolist()
+
+    imne = ImageNetExtractor(architecture='resnet')
     described = imne.describe_from_path(files)
-    joblib.dump(described, os.path.join(TRAINED_MODELS_PATH, 'vgg_features.numpy'))
+    described_test = imne.describe_from_path(files_test)
+
+    joblib.dump(described, os.path.join(TRAINED_MODELS_PATH, 'vgg_features_train.numpy'))
+    joblib.dump(described_test, os.path.join(TRAINED_MODELS_PATH, 'vgg_features_test.numpy'))
+    df_labels.to_csv(os.path.join(TRAINED_MODELS_PATH, 'labels_df_balanced.csv'))

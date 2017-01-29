@@ -3,7 +3,7 @@ import os
 from keras.callbacks import ModelCheckpoint, History
 from keras.preprocessing import image
 
-from current_models import label_encoder
+from current_models import label_encoder, optimizer_class_weights
 from logger import logger
 from models import create_model
 from prepare_data import prepare_folder_structure
@@ -55,12 +55,12 @@ imd_test_flow = imd_test.flow_from_directory(
 
 number_of_train_images = df_labels[df_labels.is_train].shape[0]
 
-
-class_counts = df_labels.label.value_counts()
-class_counts = min(class_counts) / class_counts
-class_counts.index = class_counts.index.map(lambda x: label_encoder.transform([x]))
-optimizer_class_weights = class_counts.to_dict()
-logger.info("weighted classes \n {}".format(optimizer_class_weights))
+#
+# class_counts = df_labels.label.value_counts()
+# class_counts = min(class_counts) / class_counts
+# class_counts.index = class_counts.index.map(lambda x: label_encoder.transform([x]))
+# optimizer_class_weights = class_counts.to_dict()
+# logger.info("weighted classes \n {}".format(optimizer_class_weights))
 
 
 training_history = model.fit_generator(

@@ -16,12 +16,11 @@ from settings import (
 EXCLUDE_LABELS = ['top', 'other', 'noclass']
 
 
-def prepare_folder_structure(minority_balanced=None):
+def prepare_folder_structure(minority_balanced=None, test_size=0.2):
     logger.info('Preparing folder structure')
     with open(LABELS_FILE, 'r') as labels:
         labels = json.loads(labels.read())
         labels = {os.path.join(IMAGES_PATH, k.split('/')[-1]): v for k, v in labels.items()}
-        logger.debug(labels)
 
     df_labels = pd.DataFrame(data={'label': list(labels.values()), 'file_name': list(labels.keys())})
     df_labels = df_labels[~df_labels.label.isin(EXCLUDE_LABELS)]
@@ -30,10 +29,9 @@ def prepare_folder_structure(minority_balanced=None):
     df_labels.set_value(df_labels.index, 'is_train', True)
 
     if minority_balanced:
-        df_labels = minority_balance_dataframe_by_multiple_categorical_variables(df_labels,
-                                                                                 categorical_columns=['label'])
+        df_labels = minority_balance_dataframe_by_multiple_categorical_variables(df_labels, ['label'])
 
-    train, test = train_test_split(df_labels, test_size=0.2, stratify=df_labels.label)
+    train, test = train_test_split(df_labels, test_size=test_size, stratify=df_labels.label)
     df_labels.set_value(train.index, 'is_train', True)
     df_labels.set_value(test.index, 'is_train', False)
     df_labels = df_labels.reindex_axis(sorted(df_labels.columns), axis=1)
@@ -41,6 +39,7 @@ def prepare_folder_structure(minority_balanced=None):
     if os.path.exists(FULL_EXP_PATH):
         shutil.rmtree(FULL_EXP_PATH)
 
+    logger.info("Creating folders: \n {}, {}, {}".format(FULL_EXP_PATH, TRAIN_PATH, TEST_PATH))
     os.makedirs(FULL_EXP_PATH)
     os.makedirs(TRAIN_PATH)
     os.makedirs(TEST_PATH)
@@ -61,10 +60,15 @@ def prepare_folder_structure(minority_balanced=None):
 
     le = LabelEncoder()
     le.fit(df_labels.label)
+    logger.info("Pickling label-encoder for current dataset")
     joblib.dump(le, os.path.join(TRAINED_MODELS_PATH, 'label_encoder.scikitlearn'))
 
-    logger.info(df_labels.label.value_counts())
+    logger.info("class counts:")
+    logger.info("\n {}".format(df_labels.label.value_counts()))
 
+    logger.info("Writing labels-dataframe to csv @ {}".format(TRAINED_MODELS_PATH))
+
+    df_labels['labels_encoded'] = df_labels.label.apply(lambda x: le.transform([x])[0])
     df_labels.to_csv(os.path.join(TRAINED_MODELS_PATH, 'labels_df.csv'))
 
-    return df_labels
+    return df_labels, le

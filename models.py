@@ -1,8 +1,9 @@
 from keras.layers import Convolution2D, Activation, MaxPooling2D, Flatten, Dense
 from keras.models import Sequential
+from settings import IMAGE_ROWS, IMAGE_COLS
 
 
-def create_model(img_rows, img_cols, n_classes):
+def create_model(n_classes, img_rows=IMAGE_ROWS, img_cols=IMAGE_COLS):
     model = Sequential()
     model.add(Convolution2D(32, 3, 3, input_shape=(3, img_rows, img_cols)))
     model.add(Activation('relu'))
@@ -49,4 +50,3 @@ def create_fully_connected(shape_1d, n_classes):
     model.add(Activation('softmax'))
 
     return model
-

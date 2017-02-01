@@ -64,7 +64,7 @@ def load_images_keras(images_path_list, **kwargs):
     )
 
 
-def load_image_keras_imagenet_compatible(image_path, normalize_image=True, gray=False, target_size=(224, 224)):
+def load_image_keras_imagenet_compatible(image_path, normalize_image=False, gray=False, target_size=(224, 224)):
     from keras.preprocessing import image
     from keras.applications.vgg19 import preprocess_input
 
@@ -72,9 +72,11 @@ def load_image_keras_imagenet_compatible(image_path, normalize_image=True, gray=
 
     imarray = image.img_to_array(im)
 
+    imarray = np.expand_dims(imarray, axis=0)
+    imarray = preprocess_input(imarray)
+
     if normalize_image:
         imarray = imarray * 1 / 255
 
-    imarray = np.expand_dims(imarray, axis=0)
-    imarray = preprocess_input(imarray)
     return imarray
+

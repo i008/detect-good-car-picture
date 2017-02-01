@@ -14,3 +14,4 @@ TRAINED_MODELS_PATH = os.path.join(PROJECT_PATH, 'trained_models')
 IMAGES_PATH = '/home/i008/cars_train'  # path to images to train on
 BALANCE = False
 DEBUG = True
+REVISION = '14:52'

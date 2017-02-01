@@ -4,7 +4,7 @@ from settings import IMAGE_ROWS, IMAGE_COLS
 from utils import load_image_keras
 
 
-@begin.start
+# @begin.start
 def run(image_path=''):
     im = load_image_keras(
         image_path,

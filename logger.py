@@ -31,4 +31,4 @@ def get_logger(lvl=logging.DEBUG, log_file_name=None, logger_name='default', elk
 
     return logger
 
-logger = get_logger()
+logger = get_logger(logger_name='i008')

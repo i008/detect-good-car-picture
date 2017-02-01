@@ -20,57 +20,56 @@ history_callback = History()
 callbacks = [checkpoint_callback, history_callback]
 model = create_model(img_cols=IMAGE_COLS, img_rows=IMAGE_ROWS, n_classes=n_classes)
 
-model.compile(
-    loss='categorical_crossentropy',
-    optimizer='adam',
-    metrics=['accuracy']
-)
+if __name__ == '__main__':
+    model.compile(
+        loss='categorical_crossentropy',
+        optimizer='adam',
+        metrics=['accuracy']
+    )
 
-imd_train = image.ImageDataGenerator(
-    rescale=1. / 255,
-    shear_range=0.2,
-    zoom_range=0.2,
-    horizontal_flip=True,
-    vertical_flip=True
+    imd_train = image.ImageDataGenerator(
+        rescale=1. / 255,
+        shear_range=0.2,
+        zoom_range=0.2,
+        horizontal_flip=True,
+        vertical_flip=True
 
-)
-imd_test = image.ImageDataGenerator(rescale=1. / 255)
+    )
+    imd_test = image.ImageDataGenerator(rescale=1. / 255)
 
+    imd_train_flow = imd_train.flow_from_directory(
+        TRAIN_PATH,
+        color_mode='rgb',
+        target_size=TARGET_SIZE,
+        batch_size=64,
+        class_mode='categorical'
+    )
 
-imd_train_flow = imd_train.flow_from_directory(
-    TRAIN_PATH,
-    color_mode='rgb',
-    target_size=TARGET_SIZE,
-    batch_size=64,
-    class_mode='categorical'
-)
+    imd_test_flow = imd_test.flow_from_directory(
+        TEST_PATH,
+        color_mode='rgb',
+        batch_size=64,
+        class_mode='categorical',
+        target_size=TARGET_SIZE
+    )
 
-imd_test_flow = imd_test.flow_from_directory(
-    TEST_PATH,
-    color_mode='rgb',
-    batch_size=64,
-    class_mode='categorical',
-    target_size=TARGET_SIZE
-)
+    number_of_train_images = df_labels[df_labels.is_train].shape[0]
 
-number_of_train_images = df_labels[df_labels.is_train].shape[0]
+    #
+    # class_counts = df_labels.label.value_counts()
+    # class_counts = min(class_counts) / class_counts
+    # class_counts.index = class_counts.index.map(lambda x: label_encoder.transform([x]))
+    # optimizer_class_weights = class_counts.to_dict()
+    # logger.info("weighted classes \n {}".format(optimizer_class_weights))
 
-#
-# class_counts = df_labels.label.value_counts()
-# class_counts = min(class_counts) / class_counts
-# class_counts.index = class_counts.index.map(lambda x: label_encoder.transform([x]))
-# optimizer_class_weights = class_counts.to_dict()
-# logger.info("weighted classes \n {}".format(optimizer_class_weights))
-
-
-training_history = model.fit_generator(
-    imd_train_flow,
-    validation_data=imd_test_flow,
-    samples_per_epoch=number_of_train_images * 3,
-    nb_epoch=30,
-    verbose=True,
-    nb_val_samples=200,
-    # class_weight={0: 1, 1: 0.1808, 2: 0.38, 3: 0.03, 4: 0.2},
-    class_weight=optimizer_class_weights,
-    callbacks=callbacks
-)
+    training_history = model.fit_generator(
+        imd_train_flow,
+        validation_data=imd_test_flow,
+        samples_per_epoch=number_of_train_images * 3,
+        nb_epoch=30,
+        verbose=True,
+        nb_val_samples=200,
+        # class_weight={0: 1, 1: 0.1808, 2: 0.38, 3: 0.03, 4: 0.2},
+        class_weight=optimizer_class_weights,
+        callbacks=callbacks
+    )

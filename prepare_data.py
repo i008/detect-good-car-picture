@@ -72,3 +72,7 @@ def prepare_folder_structure(minority_balanced=None, test_size=0.2):
     df_labels.to_csv(os.path.join(TRAINED_MODELS_PATH, 'labels_df.csv'))
 
     return df_labels, le
+
+
+if __name__ == '__main__':
+    prepare_folder_structure(minority_balanced=False)

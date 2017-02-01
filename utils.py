@@ -2,6 +2,8 @@ import os
 
 import numpy as np
 from PIL import Image
+from keras import backend as K
+from keras.layers import Convolution2D
 
 
 def list_images(base_path, contains=None):
@@ -80,3 +82,57 @@ def load_image_keras_imagenet_compatible(image_path, normalize_image=False, gray
 
     return imarray
 
+
+def get_result_and_features_from_vgg_model(X, trained_model, feature_layer='last_conv'):
+    """
+    :param X: Batch with dimensions according to the models first layer input-shape
+    :param trained_model: Model to extract data from
+    :param feature_layer: Index of the layer we want to extract features from (usually last Conv)
+    :return:
+    """
+
+    if isinstance(feature_layer, str) and feature_layer == 'last_conv':
+        feature_layer = get_ix_of_last_conv_layer(trained_model)
+
+    get_features = K.function([trained_model.layers[0].input, K.learning_phase()],
+                              [trained_model.layers[feature_layer].output])
+
+    get_final = K.function([trained_model.layers[feature_layer + 1].input, K.learning_phase()],
+                           [trained_model.layers[-1].output])
+
+    features = get_features([X, 0])
+    final_results = get_final([features[0], 0])
+
+    return final_results[0], features[0]
+
+def get_result_and_features_pretrained(X, trained_model, architecture='resnet'):
+    """
+    :param X: Batch with dimensions according to the models first layer input-shape
+    :param trained_model: Model to extract data from
+    :param feature_layer: Index of the layer we want to extract features from (usually last Conv)
+    :return:
+    """
+
+    if architecture == 'resnet':
+        feature_layer = -2
+    elif architecture == 'vgg19':
+        feature_layer = get_ix_of_last_conv_layer(trained_model)
+    else:
+        raise ValueError('Unknown architecture')
+
+    get_features = K.function([trained_model.layers[0].input, K.learning_phase()],
+                              [trained_model.layers[feature_layer].output])
+
+    get_final = K.function([trained_model.layers[feature_layer + 1].input, K.learning_phase()],
+                           [trained_model.layers[-1].output])
+
+    features = get_features([X, 0])
+    final_results = get_final([features[0], 0])
+
+    return final_results[0], features[0]
+
+
+
+def get_ix_of_last_conv_layer(model):
+    mask = np.array(map(lambda x: isinstance(x, Convolution2D), model.layers))
+    return np.where(mask == 1)[0].max()

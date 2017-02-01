@@ -40,11 +40,13 @@ def create_model(n_classes, img_rows=IMAGE_ROWS, img_cols=IMAGE_COLS):
 
 def create_fully_connected(shape_1d, n_classes):
     model = Sequential()
-    model.add(Dense(2048, input_dim=shape_1d))
+    model.add(Dense(512, input_dim=shape_1d))
     model.add(Activation('relu'))
-    model.add(Dense(1024))
+    model.add(Dense(256))
     model.add(Activation('relu'))
-    model.add(Dense(512))
+    model.add(Dense(111))
+    model.add(Activation('relu'))
+    model.add(Dense(55))
     model.add(Activation('relu'))
     model.add(Dense(n_classes))
     model.add(Activation('softmax'))

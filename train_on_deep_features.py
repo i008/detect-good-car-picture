@@ -20,8 +20,6 @@ y_test_one_hot = to_categorical(label_encoder.transform(y_test))
 # rfc.fit(X_train, y_train)
 # print(rfc.oob_score_)
 
-
-
 nn = create_fully_connected(X_train.shape[1], df_labels_balanced.label.unique().shape[0])
 nn.compile(
     loss='categorical_crossentropy',
@@ -30,10 +28,11 @@ nn.compile(
 
 )
 
-nn.fit(
-    X_train,
-    y_train_one_hot,
-    nb_epoch=100,
-    class_weight=optimizer_class_weights,
-    validation_data=(X_test, y_test_one_hot)
-)
+if __name__ == '__main__':
+    nn.fit(
+        X_train,
+        y_train_one_hot,
+        nb_epoch=100,
+        class_weight=optimizer_class_weights,
+        validation_data=(X_test, y_test_one_hot)
+    )

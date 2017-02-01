@@ -47,7 +47,10 @@ class SimpleImageLabaler:
 
     def _get_next_first_unlabeled(self):
         # numpy solution np.where(np.array(self.image_list_label.values()) == 'noclass')[0]
-        return [i for i, x in enumerate(self.images_list_label.values()) if x == 'noclass'][0]
+        try:
+            return [i for i, x in enumerate(self.images_list_label.values()) if x == 'noclass'][0]
+        except IndexError:
+            return 0
 
     def _go_to_previous(self, *args):
         self.slider.value -= 1

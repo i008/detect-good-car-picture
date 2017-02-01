@@ -1,6 +1,7 @@
 import os
 
 import numpy as np
+from i008.pandas_shortcuts import minority_balance_dataframe_by_multiple_categorical_variables
 from keras.applications.resnet50 import ResNet50
 from keras.applications.vgg19 import VGG19
 from sklearn.externals import joblib
@@ -39,14 +40,14 @@ class ImageNetExtractor:
         return self.describe(array_of_images).reshape(array_of_images.shape[0], -1)
 
 
-def extract_features(df_labels=df_labels, save=True):
+def extract_features(df_labels=df_labels, save=True, architecture='resnet'):
     # df_labels = minority_balance_dataframe_by_multiple_categorical_variables(df_labels, categorical_columns=['label'])
 
     files = df_labels[df_labels.is_train].file_name.tolist()
     files_test = df_labels[~df_labels.is_train].file_name.tolist()
     logger.info(files_test)
 
-    imne = ImageNetExtractor(architecture='resnet')
+    imne = ImageNetExtractor(architecture=architecture)
     described = imne.describe_from_path(files)
     described_test = imne.describe_from_path(files_test)
 

@@ -105,6 +105,7 @@ def get_result_and_features_from_vgg_model(X, trained_model, feature_layer='last
 
     return final_results[0], features[0]
 
+
 def get_result_and_features_pretrained(X, trained_model, architecture='resnet'):
     """
     :param X: Batch with dimensions according to the models first layer input-shape
@@ -116,6 +117,7 @@ def get_result_and_features_pretrained(X, trained_model, architecture='resnet'):
     if architecture == 'resnet':
         feature_layer = -2
     elif architecture == 'vgg19':
+        # get last conv layer from vgg19
         feature_layer = get_ix_of_last_conv_layer(trained_model)
     else:
         raise ValueError('Unknown architecture')
@@ -130,7 +132,6 @@ def get_result_and_features_pretrained(X, trained_model, architecture='resnet'):
     final_results = get_final([features[0], 0])
 
     return final_results[0], features[0]
-
 
 
 def get_ix_of_last_conv_layer(model):

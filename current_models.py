@@ -7,12 +7,8 @@ from sklearn.externals import joblib
 from settings import TRAINED_MODELS_PATH, PROJECT_PATH
 
 
-def get_features(test=False):
-    if test:
-        file_name = 'vgg_features_test.numpy'
-    else:
-        file_name = 'vgg_features_train.numpy'
-
+def get_features(testortrain='test', architecture='resnet'):
+    file_name = '{architecture}_features_{testortrain}.numpy'.format(architecture=architecture, testortrain=testortrain)
     return joblib.load(os.path.join(TRAINED_MODELS_PATH, file_name))
 
 

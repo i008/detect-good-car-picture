@@ -1,7 +1,6 @@
 import os
 
 import numpy as np
-from i008.pandas_shortcuts import minority_balance_dataframe_by_multiple_categorical_variables
 from keras.applications.resnet50 import ResNet50
 from keras.applications.vgg19 import VGG19
 from sklearn.externals import joblib
@@ -42,7 +41,7 @@ class ImageNetExtractor:
 
 def extract_features(df_labels=df_labels, save=True, architecture='resnet'):
     # df_labels = minority_balance_dataframe_by_multiple_categorical_variables(df_labels, categorical_columns=['label'])
-
+    assert architecture in ("resnet", "vgg19")
     files = df_labels[df_labels.is_train].file_name.tolist()
     files_test = df_labels[~df_labels.is_train].file_name.tolist()
     logger.info(files_test)
@@ -52,8 +51,8 @@ def extract_features(df_labels=df_labels, save=True, architecture='resnet'):
     described_test = imne.describe_from_path(files_test)
 
     if save:
-        joblib.dump(described, os.path.join(TRAINED_MODELS_PATH, 'vgg_features_train.numpy'))
-        joblib.dump(described_test, os.path.join(TRAINED_MODELS_PATH, 'vgg_features_test.numpy'))
+        joblib.dump(described, os.path.join(TRAINED_MODELS_PATH, '{}_features_train.numpy'.format(architecture)))
+        joblib.dump(described_test, os.path.join(TRAINED_MODELS_PATH, '{}_features_test.numpy'.format(architecture)))
         df_labels.to_csv(os.path.join(TRAINED_MODELS_PATH, 'labels_df_balanced.csv'))
     else:
         return described, described_test

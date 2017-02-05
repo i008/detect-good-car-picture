@@ -6,8 +6,8 @@ from current_models import label_encoder
 from models import create_fully_connected
 
 df_labels_balanced = df_labels
-X_train = get_features(test=False)
-X_test = get_features(test=True)
+X_train = get_features(testortrain='train')
+X_test = get_features(testortrain='test')
 y_train = df_labels_balanced[df_labels_balanced.is_train]['label'].values
 y_test = df_labels_balanced[~df_labels_balanced.is_train]['label'].values
 

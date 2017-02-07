@@ -1,4 +1,4 @@
-### Project summary
+### 0) Project summary
 
 The main goal of this project is to find out if its feasable to create an image classifier, capable of detecting   
 images of car and the perspective from wich the photo was taken (front-side, back-side, side, back, front) None of the 
@@ -32,12 +32,18 @@ Labeling guidelines:
 
 As you can imagine with pretty simple guidelines like that some times choosing the right class can be tricky.
 
-To make the labeling process smoother, i wrote z simple jupyter widget to make labeling easier
+To make the labeling process smoother, i wrote a simple jupyter widget to make labeling easier
   
 ![](docs/simple_image_labaler.png "dkljkdlj")
 
 ---
 ### 2) Training data summary, fighting class imbalance
+
+The stanford-cards dataset is havily imbalanced in terms of perspective from wich the photos where taken
+This adds another layer of complexity and makes solving the problem a little bit more challenging
+
+The final count-per-class the dataset looks as follows:
+
 |label_count|label|
 |--- |---|
 |196|back|
@@ -45,6 +51,7 @@ To make the labeling process smoother, i wrote z simple jupyter widget to make l
 |952|side|
 |1084|back-side|
 |5246|front-side|
+
 
 
 (class counts df here)  
